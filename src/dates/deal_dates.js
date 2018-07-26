@@ -35,7 +35,6 @@ export default class DealPeriods {
     for (let i = 1; i < length; i++) {
       const days = getDaysInMonth(cutoffDate)
       day[i] = days
-      // days == 28 && setLeap(i)
 
       cutoffDate.setMonth(month[i - 1])
       month[i] = cutoffDate.getMonth() + 1
