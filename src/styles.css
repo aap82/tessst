@@ -2,3 +2,22 @@
   font-family: sans-serif;
   text-align: center;
 }
+legend {
+  background-color: #000;
+  color: #fff;
+  padding: 3px 6px;
+}
+
+.output {
+  font: 1rem "Fira Sans", sans-serif;
+}
+
+input {
+  margin: 0.4rem;
+}
+
+label {
+  display: inline-block;
+  text-align: right;
+  width: 20%;
+}

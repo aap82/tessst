@@ -2,24 +2,66 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import "./styles.css"
+import DealPeriods from "./dates/deal_dates"
 
 class DatesForm extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      date: new Date(2018, 7, 1),
-    }
+    this.settle = React.createRef()
+    this.firstpay = React.createRef()
+
+    this.setDate = this.setDate.bind(this)
   }
 
-  setDate = date => {
-    console.log(date)
+  setDate(e) {
+    console.time("test")
+
+    const date = new Date(this.settle.current.value)
+    const periods = DealPeriods.create(date)
+    console.timeEnd("test")
+    console.log(periods.day)
+    console.log(periods.month)
+
+    return
   }
 
   render() {
-    console.log("a", this.state.date)
     return (
       <div>
-        <input type="date" onChange={this.setDate} />
+        <fieldset>
+          <legend>Choose dates</legend>
+
+          <div>
+            <label htmlFor="settle">Settle</label>
+            <input
+              type="date"
+              id="settle"
+              name="dates"
+              ref={this.settle}
+              defaultValue="2018-07-22"
+              min="2018-01-01"
+              max="2018-12-31"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="firstpay">First Pay</label>
+            <input
+              type="date"
+              id="firstpay"
+              name="dates"
+              defaultValue="2018-07-29"
+              min="2018-01-01"
+              max="2018-12-31"
+            />
+          </div>
+          <br />
+          <div>
+            <button title="submit" onClick={this.setDate}>
+              Set
+            </button>
+          </div>
+        </fieldset>
       </div>
     )
   }
@@ -27,8 +69,6 @@ class DatesForm extends React.Component {
 function App() {
   return (
     <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
       <DatesForm />
     </div>
   )
