@@ -21,3 +21,11 @@ label {
   text-align: right;
   width: 20%;
 }
+ul {
+  list-style: none;
+}
+li {
+  display: flex;
+  width: 200px;
+  justify-content: space-evenly;
+}

@@ -2,25 +2,41 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import "./styles.css"
-import DealPeriods from "./dates/deal_dates"
+import { createDealPeriods } from "./dates/deal_dates"
+// <div>{periods.months[i]}</div>
+// <div>{y}</div>
+const ItemsList = ({ periods }) =>
+  periods.accruedDays.map((y, i) => (
+    <li key={i}>
+      <div>{i}</div>
+
+      <div>{periods.accruedDays[i]}</div>
+      <div>{periods.reservedDays[i]}</div>
+    </li>
+  ))
 
 class DatesForm extends React.Component {
   constructor(props) {
     super(props)
     this.settle = React.createRef()
     this.firstpay = React.createRef()
-
     this.setDate = this.setDate.bind(this)
+    this.state = {
+      periods: undefined,
+    }
   }
 
   setDate(e) {
+    const date = new Date(...[this.settle.current.value.split("-")])
     console.time("test")
 
-    const date = new Date(this.settle.current.value)
-    const periods = DealPeriods.create(date)
+    const periods = createDealPeriods(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    )
     console.timeEnd("test")
-    console.log(periods.day)
-    console.log(periods.month)
+    this.setState({ periods })
 
     return
   }
@@ -32,13 +48,13 @@ class DatesForm extends React.Component {
           <legend>Choose dates</legend>
 
           <div>
-            <label htmlFor="settle">Settle</label>
+            <label htmlFor="settle">settle</label>
             <input
               type="date"
               id="settle"
               name="dates"
               ref={this.settle}
-              defaultValue="2018-07-22"
+              defaultValue="2018-01-18"
               min="2018-01-01"
               max="2018-12-31"
             />
@@ -62,6 +78,11 @@ class DatesForm extends React.Component {
             </button>
           </div>
         </fieldset>
+        {this.state.periods && (
+          <ul>
+            <ItemsList periods={this.state.periods} />
+          </ul>
+        )}
       </div>
     )
   }
