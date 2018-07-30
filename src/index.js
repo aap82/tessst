@@ -5,6 +5,7 @@ import "./styles.css"
 import { createDealPeriods } from "./dates/deal_dates"
 // <div>{periods.months[i]}</div>
 // <div>{y}</div>
+import { ModelDate, dateStrToArr } from "./model"
 const ItemsList = ({ periods }) =>
   periods.accruedDays.map((y, i) => (
     <li key={i}>
@@ -30,12 +31,9 @@ class DatesForm extends React.Component {
     const date = new Date(...[this.settle.current.value.split("-")])
     console.time("test")
 
-    const periods = createDealPeriods(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-    )
+    const periods = createDealPeriods(dateStrToArr(this.settle.current.value))
     console.timeEnd("test")
+
     this.setState({ periods })
 
     return

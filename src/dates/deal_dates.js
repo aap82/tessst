@@ -1,56 +1,37 @@
-import { getDaysAccrued } from "./utils"
+import { getDaysAccrued } from "./"
+import dates from "../model/ModelInput"
+import { setNextMonth } from "../model"
+const ENTRIES = 120 + 1
+const emptyArr = new Array(ENTRIES)
+for (let i = 0; i < ENTRIES; i++) emptyArr[i] = 0
 
-const getEmptyNumArray = (n = 121) => {
-  const numArr = new Array(n)
-  for (let i = 0; i < n; i++) numArr[i] = 0
-
-  return function() {
-    return numArr.slice(0)
-  }
-}
-
-// class DealPeriodsModel {
-//   constructor(m, y, a, r) {
-//     this.months = m
-//     this.years = y
-//     this.accruedDays = a
-//     this.reservedDays = r
-//   }
-// }
 function DealPeriodsModel(a, r) {
-  // this.months = m
-  // this.years = y
   this.accruedDays = a
   this.reservedDays = r
+  this.dates = dates
 }
 
-const defPeriods = getEmptyNumArray()
+export function createDealPeriods(date) {
+  const arr = date.slice(0)
+  const accruedArr = emptyArr.slice(0)
+  const reservedArr = emptyArr.slice(0)
 
-export function createDealPeriods(year, m, day) {
-  // const monthsArr = defPeriods()
-  // const yearsArr = defPeriods()
-  const accruedArr = defPeriods()
-  const reservedArr = defPeriods()
-
-  const rollYear = () => {
-    m = 0
-    year = year + 1
-    return
-  }
   const addReserve = i => {
-    let d = 30 - accruedArr[i]
+    const d = 30 - accruedArr[i]
     reservedArr[i] = -d
-    while (d--) {
-      reservedArr[i - d - 1] = 1
+    reservedArr[i - 1] = 1
+    if (d == 2) {
+      reservedArr[i - 2] = 1
     }
+    // while (d--) {
+    //   reservedArr[i - d - 1] = 1
+    // }
     return
   }
-
-  for (let i = 0; i < 121; i++) {
-    accruedArr[i] = getDaysAccrued(year, m)
-    m++
-    m === 12 && rollYear()
-    m === 3 && addReserve(i)
+  for (let i = 0; i < 120; i++) {
+    accruedArr[i] = getDaysAccrued(...arr)
+    arr[1] === 3 && addReserve(i)
+    setNextMonth(arr)
   }
   // accruedArr[0] -= day
   return new DealPeriodsModel(accruedArr, reservedArr)
